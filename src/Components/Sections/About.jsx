@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import Logo from "../../Images/Logo.png";
 import About from "../../Images/About.jpg";
 
 const AboutUs = () => {
+  const section1Ref = useRef(null);
+  const section2Ref = useRef(null);
+  const isInView1 = useInView(section1Ref, { once: true, margin: "-100px" });
+  const isInView2 = useInView(section2Ref, { once: true, margin: "-100px" });
+
   return (
     <>
-      <section
+      <motion.section
+        ref={section1Ref}
+        initial={{ opacity: 0, y: 60 }}
+        animate={isInView1 ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8, ease: "easeOut" }}
         id="about"
         className="relative scroll-mt-20 min-h-screen w-screen flex flex-col items-center justify-start px-4 pt-20"
       >
@@ -39,9 +49,14 @@ const AboutUs = () => {
             </p>
           </div>
         </div>
-      </section>
-
-      <section className="w-screen relative scroll-mt-20 min-h-screen bg-white py-12 flex flex-col items-center px-[30px]">
+      </motion.section>
+      <motion.section
+        ref={section2Ref}
+        initial={{ opacity: 0, y: 60 }}
+        animate={isInView2 ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="w-screen relative scroll-mt-20 min-h-screen bg-white py-12 flex flex-col items-center px-[30px]"
+      >
         <div className="absolute top-6 left-6 text-[#576b62] text-[200px] font-serif leading-none opacity-80 pointer-events-none select-none z-0">
           &#8220;
         </div>
@@ -72,8 +87,9 @@ const AboutUs = () => {
             letterzetting. Het is in de jaren '60 populair geworden met de
           </p>
         </div>
-      </section>
+      </motion.section>
     </>
   );
 };
+
 export default AboutUs;

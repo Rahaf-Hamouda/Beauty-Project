@@ -1,4 +1,6 @@
+import React, { useRef } from "react";
 import { FiCheckCircle, FiShoppingBag, FiHeart } from "react-icons/fi";
+import { motion, useInView } from "framer-motion";
 
 const features = [
   {
@@ -22,20 +24,51 @@ const features = [
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.4,
+      duration: 1.5, 
+      ease: "easeOut",
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 },
+};
+
 export default function FeatureBanner() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
   return (
-    <section className="w-screen bg-[#576b62] text-[#ffffff] px-8 py-12 font-main">
+    <motion.section
+      ref={ref}
+      className="w-screen bg-[#576b62] text-[#ffffff] px-8 py-12 font-main"
+      variants={containerVariants}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+    >
       <div className="flex flex-col md:flex-row gap-10 justify-around items-start">
         {features.map((feature, idx) => (
-          <div key={idx} className="flex items-start gap-4 max-w-xs">
+          <motion.div
+            key={idx}
+            className="flex items-start gap-4 max-w-xs"
+            variants={itemVariants}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+          >
             {feature.icon}
             <div>
               <h3 className="text-xl font-semibold mb-1">{feature.title}</h3>
               <p className="text-sm opacity-90">{feature.description}</p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 }
